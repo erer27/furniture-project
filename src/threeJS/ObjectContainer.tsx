@@ -7,11 +7,12 @@ import {
   PointerLockControls,
   useCamera,
 } from "@react-three/drei";
-import Model from "./BP_Martin_C";
+import Furniture from "./Furniture";
 import FloorPlane from "./Floor";
 import { useThree } from "@react-three/fiber";
 import { Vector3 } from "three";
 import useKey from "../hooks/useKey";
+import FurnitureContainer from "./FurnitureContainer";
 
 const ObjectContainer = () => {
   const three = useThree();
@@ -34,7 +35,7 @@ const ObjectContainer = () => {
       <directionalLight position={[-1, 0, 1]} />
       <axesHelper args={[10]} />
       <FloorPlane />
-      <Model />
+      <FurnitureContainer />
     </group>
   );
 };
