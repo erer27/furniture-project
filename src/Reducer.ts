@@ -1,4 +1,4 @@
-import { PointerLockControlsReducer } from "./threeJS/ObjectContainer";
+import { PointerLockControlsReducer } from "./threeJS/PointerLockControlsComponent";
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
 
