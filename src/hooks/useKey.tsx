@@ -7,13 +7,15 @@ import {
 } from "react";
 import { Vector3 } from "three";
 
-function useKey(camera: any) {
+function useKey(control: any) {
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "t") {
+        control.current.unlock();
+        console.log(control);
       }
     },
-    [camera]
+    [control]
   );
 
   useEffect(() => {

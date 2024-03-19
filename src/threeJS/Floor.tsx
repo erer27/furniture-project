@@ -2,6 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
 import { DoubleSide } from "three";
+import { Html } from "@react-three/drei";
 
 const FloorPlane = () => {
   const texture = useLoader(

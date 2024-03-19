@@ -4,15 +4,18 @@ Command: npx gltfjsx@6.2.16 BP_Martin_C.glb
 */
 
 import React, { useEffect, useRef } from "react";
-import { useCamera, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { furnitureInfo } from "./FurnitureInfo";
-import * as THREE from "three";
 import { Vector3 } from "three";
 
 type furnitureProps = { furnitureInfo: furnitureInfo };
 
 export default function Furniture({ furnitureInfo }: furnitureProps) {
   const obj = useRef<any>();
+
+  const handleClick = (e: any) => {
+    console.log(e);
+  };
 
   // add event listener to highlight dragged objects
   const position = new Vector3(
@@ -24,10 +27,10 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
   const { nodes, materials } = useGLTF(`./furnitures/${furnitureInfo.file}`);
   const meshs = Object.values(nodes).filter((mesh) => mesh.type === "Mesh");
   useEffect(() => {
-    console.log(nodes);
+    //console.log(nodes);
   }, []);
   return (
-    <group dispose={null} ref={obj} position={position}>
+    <group dispose={null} ref={obj} position={position} onClick={handleClick}>
       {meshs.map((mesh: any) => (
         <mesh
           key={mesh.uuid}
@@ -38,5 +41,3 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
     </group>
   );
 }
-
-// useGLTF.preload("./BP_Martin_C.glb");
