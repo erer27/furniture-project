@@ -12,9 +12,15 @@ const FurnitureContainer = () => {
   });
   return (
     <group>
-      {allFurnitureInfo?.map((furnitureInfo) => (
-        <Furniture furnitureInfo={furnitureInfo}></Furniture>
-      ))}
+      {allFurnitureInfo?.map((furnitureInfo, index) => {
+        //console.log(index);
+        return (
+          <Furniture
+            furnitureInfo={furnitureInfo}
+            key={furnitureInfo.file}
+          ></Furniture>
+        );
+      })}
     </group>
   );
 };

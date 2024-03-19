@@ -14,9 +14,7 @@ const CanvasContainer = () => {
 
   const crossHairHidden = PointerLockControlsState ? "" : "hidden";
 
-  useEffect(() => {
-    console.log(PointerLockControlsState);
-  }, [PointerLockControlsState]);
+  useEffect(() => {}, []);
 
   return (
     <div className="m-8 border-2 border-black w-[48rem] h-[32rem] flex justify-center items-center relative">

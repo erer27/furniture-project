@@ -33,12 +33,18 @@ export const PointerLockControlsComponent = () => {
   useEffect(() => {
     control.current?.addEventListener("lock", () => {
       dispatch({ type: "active" });
-      // console.log("lock");
     });
     control.current?.addEventListener("unlock", () => {
       dispatch({ type: "inactive" });
-      // console.log("unlock");
     });
+    return () => {
+      control.current?.removeEventListener("lock", () => {
+        dispatch({ type: "active" });
+      });
+      control.current?.removeEventListener("unlock", () => {
+        dispatch({ type: "inactive" });
+      });
+    };
   });
 
   const control = useRef<any>();
