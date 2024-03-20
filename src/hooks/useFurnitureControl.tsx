@@ -5,7 +5,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Group, Vector3 } from "three";
 import { RootState } from "../Reducer";
 
@@ -13,6 +13,7 @@ function useFurnitureControl(obj: any) {
   const targetFurniture = useSelector((state: RootState) => {
     return state.furnitureControls.targetFurniture;
   });
+  const dispatch = useDispatch();
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       //console.log(event);
