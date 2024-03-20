@@ -7,9 +7,7 @@ import FurnitureContainer from "./FurnitureContainer";
 import { PointerLockControlsComponent } from "./PointerLockControlsComponent";
 import { furnitureInfo } from "./FurnitureInfo";
 
-type objectContainerProps = { furnitureInfo: furnitureInfo[] };
-
-const ObjectContainer = ({ furnitureInfo }: objectContainerProps) => {
+const ObjectContainer = () => {
   const control = useRef<any>();
 
   return (
@@ -20,7 +18,7 @@ const ObjectContainer = ({ furnitureInfo }: objectContainerProps) => {
       <directionalLight position={[-1, 0, 1]} />
       <axesHelper args={[10]} />
       <FloorPlane />
-      <FurnitureContainer allFurnitureInfo={furnitureInfo} />
+      <FurnitureContainer />
     </group>
   );
 };

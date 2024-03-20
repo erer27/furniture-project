@@ -4,6 +4,8 @@ import * as THREE from "three";
 import Furniture from "./Furniture";
 import { furnitureInfo } from "./FurnitureInfo";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import { RootState } from "../Reducer";
 
 // const initialState = {
 //   furnitureInfo: [],
@@ -26,9 +28,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // export const furnitureInfoReducer = furnitureInfoSlice.reducer;
 
-type furitureContainerProps = { allFurnitureInfo: furnitureInfo[] };
-
-const FurnitureContainer = ({ allFurnitureInfo }: furitureContainerProps) => {
+const FurnitureContainer = () => {
+  const allFurnitureInfo = useSelector((state: RootState) => {
+    return state.furnitureInfo.allFurnitureInfo;
+  });
   useEffect(() => {
     return () => {
       console.log("unmount");

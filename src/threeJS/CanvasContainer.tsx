@@ -28,7 +28,7 @@ const furnitureInfoSlice = createSlice({
   },
 });
 
-const { setFurnitureInfo } = furnitureInfoSlice.actions;
+export const { setFurnitureInfo } = furnitureInfoSlice.actions;
 
 export const furnitureInfoReducer = furnitureInfoSlice.reducer;
 
@@ -40,13 +40,10 @@ const CanvasContainer = () => {
     return state.pointerLockControls.controlsState;
   });
 
-  const allFurnitureInfo = useSelector((state: RootState) => {
-    return state.furnitureInfo.allFurnitureInfo;
-  });
-
   const crossHairHidden = PointerLockControlsState ? "" : "hidden";
 
   useEffect(() => {
+    console.log("rerendering");
     dispatch(setFurnitureInfo(debugFurniture));
   }, []);
 
@@ -57,7 +54,7 @@ const CanvasContainer = () => {
         src="crosshair.png"
       />
       <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 5] }}>
-        <ObjectContainer furnitureInfo={allFurnitureInfo} />
+        <ObjectContainer />
       </Canvas>
     </div>
   );

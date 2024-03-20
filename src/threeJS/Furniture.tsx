@@ -16,6 +16,7 @@ import { Group, Vector3 } from "three";
 import useFurnitureControl from "../hooks/useFurnitureControl";
 import { useDispatch, UseDispatch } from "react-redux";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import * as THREE from "three";
 
 const initialState = {
   targetFurniture: "",
@@ -54,7 +55,7 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
 
   // add event listener to highlight dragged objects
   const position = new Vector3(...furnitureInfo.position);
-  const rotation = furnitureInfo.rotation;
+  const rotation = new THREE.Euler(...furnitureInfo.rotation);
 
   const { nodes, materials } = useGLTF(`./furnitures/${furnitureInfo.file}`);
   const meshs = Object.values(nodes).filter((mesh) => mesh.type === "Mesh");
