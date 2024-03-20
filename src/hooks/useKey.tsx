@@ -11,7 +11,6 @@ function useKey(control: any) {
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "t") {
-        control.current.unlock();
         console.log(control);
       }
     },

@@ -5,11 +5,12 @@ import useKey from "../hooks/useKey";
 import FurnitureContainer from "./FurnitureContainer";
 
 import { PointerLockControlsComponent } from "./PointerLockControlsComponent";
+import { furnitureInfo } from "./FurnitureInfo";
 
-const ObjectContainer = () => {
+type objectContainerProps = { furnitureInfo: furnitureInfo[] };
+
+const ObjectContainer = ({ furnitureInfo }: objectContainerProps) => {
   const control = useRef<any>();
-
-  useKey(control);
 
   return (
     <group>
@@ -19,7 +20,7 @@ const ObjectContainer = () => {
       <directionalLight position={[-1, 0, 1]} />
       <axesHelper args={[10]} />
       <FloorPlane />
-      <FurnitureContainer />
+      <FurnitureContainer allFurnitureInfo={furnitureInfo} />
     </group>
   );
 };
