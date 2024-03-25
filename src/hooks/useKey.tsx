@@ -1,3 +1,4 @@
+import { useThree } from "@react-three/fiber";
 import {
   useState,
   useEffect,
@@ -5,13 +6,14 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { Vector3 } from "three";
+import { Vector2, Vector3 } from "three";
 
 function useKey(control: any) {
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "t") {
         console.log(control);
+        console.log(document);
       }
     },
     [control]

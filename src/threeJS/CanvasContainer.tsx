@@ -43,7 +43,6 @@ const CanvasContainer = () => {
   const crossHairHidden = PointerLockControlsState ? "" : "hidden";
 
   useEffect(() => {
-    console.log("rerendering");
     dispatch(setFurnitureInfo(debugFurniture));
   }, []);
 
