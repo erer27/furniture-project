@@ -11,7 +11,7 @@ import { Group, Vector2, Vector3, Clock } from "three";
 import { RootState } from "../Reducer";
 import { setFurnitureInfo } from "../threeJS/CanvasContainer";
 
-function useFurnitureControl(obj: any) {
+function useFurnitureControl(obj: any, shiftKeyPressed: boolean) {
   const targetFurniture = useSelector((state: RootState) => {
     return state.furnitureControls.targetFurniture;
   });
@@ -27,7 +27,7 @@ function useFurnitureControl(obj: any) {
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       //console.log(event);
-      if (obj && targetFurniture === obj.userData.file) {
+      if (obj && targetFurniture === obj.userData.file && !shiftKeyPressed) {
         if (event.key === "ArrowRight") {
           const [moveX, moveZ] = calculateMovingLenght(-Math.PI / 2);
           obj.position.x = obj.position.x + moveX;
@@ -45,19 +45,35 @@ function useFurnitureControl(obj: any) {
           obj.position.x = obj.position.x + moveX;
           obj.position.z = obj.position.z + moveZ;
         }
-        dispatch(
-          setFurnitureInfo(
-            allFurnitureInfo.map((element) => {
-              if (element.file === targetFurniture) {
-                return { ...element, position: [...obj.position] };
-              }
-              return element;
-            })
-          )
-        );
+      } else if (
+        obj &&
+        targetFurniture === obj.userData.file &&
+        shiftKeyPressed
+      ) {
+        if (event.key === "ArrowRight") {
+          console.log(obj.rotation);
+          obj.rotation.y += 0.01;
+        } else if (event.key === "ArrowLeft") {
+          console.log(obj.rotation);
+          obj.rotation.y -= 0.01;
+        }
       }
+      dispatch(
+        setFurnitureInfo(
+          allFurnitureInfo.map((element) => {
+            if (element.file === targetFurniture) {
+              return {
+                ...element,
+                position: [...obj.position],
+                rotation: [...obj.rotation],
+              };
+            }
+            return element;
+          })
+        )
+      );
     },
-    [targetFurniture, obj]
+    [targetFurniture, obj, shiftKeyPressed]
   );
 
   const calculateMovingLenght = useCallback(
@@ -76,7 +92,6 @@ function useFurnitureControl(obj: any) {
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
-
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };

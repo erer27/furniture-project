@@ -44,14 +44,34 @@ type furnitureProps = { furnitureInfo: furnitureInfo };
 export default function Furniture({ furnitureInfo }: furnitureProps) {
   const obj = useRef<any>();
   const dispatch = useDispatch();
+  const [shiftKeyPressed, setShiftKeyPressed] = useState(false);
 
   //const [controlFurniture, setControlFurniture] = useState<string>();
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     console.log(obj.current.userData.file);
     dispatch(setTargetFurniture(furnitureInfo.file));
-  };
-  useFurnitureControl(obj.current);
+  }, [dispatch]);
+
+  useFurnitureControl(obj.current, shiftKeyPressed);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key == "Shift") {
+        setShiftKeyPressed(true);
+      }
+    },
+    [dispatch]
+  );
+
+  const handleKeyUp = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key == "Shift") {
+        setShiftKeyPressed(false);
+      }
+    },
+    [dispatch]
+  );
 
   // add event listener to highlight dragged objects
   const position = new Vector3(...furnitureInfo.position);
@@ -60,8 +80,14 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
   const { nodes, materials } = useGLTF(`./furnitures/${furnitureInfo.file}`);
   const meshs = Object.values(nodes).filter((mesh) => mesh.type === "Mesh");
   useEffect(() => {
-    //console.log(nodes);
-  }, []);
+    console.log("furniture rerender");
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [handleKeyDown, handleKeyUp]);
   return (
     <group
       dispose={null}
