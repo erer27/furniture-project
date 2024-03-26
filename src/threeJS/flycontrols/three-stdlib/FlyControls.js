@@ -58,7 +58,6 @@ class FlyControls extends EventDispatcher {
           this.movementSpeedMultiplier = 0.1;
           break;
         case "KeyW":
-          console.log("my flycontrols");
           this.moveState.forward = 1;
           break;
         case "KeyS":
