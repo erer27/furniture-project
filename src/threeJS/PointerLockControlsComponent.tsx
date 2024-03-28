@@ -8,28 +8,6 @@ const initialState = {
   controlsState: false,
 };
 
-// export function PointerLockControlsReducer(
-//   controlsState = initialState,
-//   action: any
-// ) {
-//   switch (action.type) {
-//     case "active": {
-//       return {
-//         ...controlsState,
-//         controlsState: true,
-//       };
-//     }
-//     case "inactive": {
-//       return {
-//         ...controlsState,
-//         controlsState: false,
-//       };
-//     }
-//     default:
-//       return controlsState;
-//   }
-// }
-
 const PointerLockControlsSlice = createSlice({
   name: "pointerLockControls",
   initialState: initialState,
