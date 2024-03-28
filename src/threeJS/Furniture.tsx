@@ -17,6 +17,8 @@ import useFurnitureControl from "../hooks/useFurnitureControl";
 import { useDispatch, UseDispatch } from "react-redux";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import * as THREE from "three";
+import { useDrag } from "@use-gesture/react";
+import { ReactThreeFiber, ThreeEvent } from "@react-three/fiber";
 
 const initialState = {
   targetFurniture: "",
@@ -46,19 +48,53 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
   const dispatch = useDispatch();
   const [shiftKeyPressed, setShiftKeyPressed] = useState(false);
 
-  //const [controlFurniture, setControlFurniture] = useState<string>();
+  const [pressedKey, setPressedKey] = useState({
+    Shift: false,
+    ArrowRight: false,
+    ArrowLeft: false,
+    ArrowUp: false,
+    ArrowDown: false,
+  });
 
-  const handleClick = useCallback(() => {
-    console.log(obj.current.userData.file);
-    dispatch(setTargetFurniture(furnitureInfo.file));
-  }, [dispatch]);
+  const handleClick = useCallback(
+    (event: ThreeEvent<MouseEvent>) => {
+      dispatch(setTargetFurniture(furnitureInfo.file));
+      console.log(pressedKey);
+    },
+    [dispatch]
+  ) as (event: ThreeEvent<MouseEvent>) => void;
 
-  useFurnitureControl(obj.current, shiftKeyPressed);
+  const clock = new THREE.Clock();
+  useFurnitureControl(
+    obj.current,
+    shiftKeyPressed,
+    pressedKey,
+    clock.getDelta()
+  );
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (event.key == "Shift") {
-        setShiftKeyPressed(true);
+        setPressedKey((prevPressedKey) => {
+          console.log(clock.getDelta());
+          return { ...prevPressedKey, Shift: true };
+        });
+      } else if (event.key == "ArrowRight") {
+        setPressedKey((prevPressedKey) => {
+          return { ...prevPressedKey, ArrowRight: true };
+        });
+      } else if (event.key == "ArrowLeft") {
+        setPressedKey((prevPressedKey) => {
+          return { ...prevPressedKey, ArrowLeft: true };
+        });
+      } else if (event.key == "ArrowUp") {
+        setPressedKey((prevPressedKey) => {
+          return { ...prevPressedKey, ArrowUp: true };
+        });
+      } else if (event.key == "ArrowDown") {
+        setPressedKey((prevPressedKey) => {
+          return { ...prevPressedKey, ArrowDown: true };
+        });
       }
     },
     [dispatch]
@@ -67,7 +103,25 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
   const handleKeyUp = useCallback(
     (event: KeyboardEvent) => {
       if (event.key == "Shift") {
-        setShiftKeyPressed(false);
+        setPressedKey((prevPressedKey) => {
+          return { ...prevPressedKey, Shift: false };
+        });
+      } else if (event.key == "ArrowRight") {
+        setPressedKey((prevPressedKey) => {
+          return { ...prevPressedKey, ArrowRight: false };
+        });
+      } else if (event.key == "ArrowLeft") {
+        setPressedKey((prevPressedKey) => {
+          return { ...prevPressedKey, ArrowLeft: false };
+        });
+      } else if (event.key == "ArrowUp") {
+        setPressedKey((prevPressedKey) => {
+          return { ...prevPressedKey, ArrowUp: false };
+        });
+      } else if (event.key == "ArrowDown") {
+        setPressedKey((prevPressedKey) => {
+          return { ...prevPressedKey, ArrowDown: false };
+        });
       }
     },
     [dispatch]
@@ -79,6 +133,7 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
 
   const { nodes, materials } = useGLTF(`./furnitures/${furnitureInfo.file}`);
   const meshs = Object.values(nodes).filter((mesh) => mesh.type === "Mesh");
+
   useEffect(() => {
     console.log("furniture rerender");
     document.addEventListener("keydown", handleKeyDown);
@@ -87,13 +142,16 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
     };
-  }, [handleKeyDown, handleKeyUp]);
+  }, [handleKeyDown, handleKeyUp, obj]);
   return (
     <group
       dispose={null}
       ref={obj}
       position={position}
-      onClick={handleClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        handleClick(e);
+      }}
       rotation={rotation}
       userData={{ file: furnitureInfo.file }}
     >
