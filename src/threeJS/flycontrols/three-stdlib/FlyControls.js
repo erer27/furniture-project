@@ -49,6 +49,7 @@ class FlyControls extends EventDispatcher {
     __publicField(this, "moveVector", new Vector3(0, 0, 0));
     __publicField(this, "rotationVector", new Vector3(0, 0, 0));
     __publicField(this, "keydown", (event) => {
+      event.preventDefault();
       if (event.altKey) {
         return;
       }

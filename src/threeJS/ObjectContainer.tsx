@@ -10,7 +10,7 @@ import { furnitureInfo } from "./FurnitureInfo";
 const ObjectContainer = () => {
   const control = useRef<any>();
 
-  useKey(control.current);
+  //useKey(control.current);
 
   useEffect(() => {
     control.current?.addEventListener("keydown", (e: any) => {

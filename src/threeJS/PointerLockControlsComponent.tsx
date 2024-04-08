@@ -32,22 +32,45 @@ export const PointerLockControlsComponent = () => {
 
   useKey(control);
 
-  useEffect(() => {
-    control.current?.addEventListener("lock", () => {
-      dispatch(setActive());
-    });
-    control.current?.addEventListener("unlock", () => {
-      dispatch(setInactive());
-    });
-    return () => {
-      control.current?.removeEventListener("lock", () => {
-        dispatch(setActive());
-      });
-      control.current?.removeEventListener("unlock", () => {
-        dispatch(setInactive());
-      });
-    };
-  });
+  const handleLock = (e: any) => {
+    e.stopPropagation();
+    dispatch(setActive());
+  };
+  const handleUnLock = (e: any) => {
+    e.stopPropagation();
+    dispatch(setInactive());
+  };
 
-  return <PointerLockControls ref={control} />;
+  // useEffect(() => {
+  //   control.current?.addEventListener("lock", (e: any) => {
+  //     if (e.target !== e.currentTarget) return;
+  //     dispatch(setActive());
+  //   });
+  //   control.current?.addEventListener("unlock", (e: any) => {
+  //     if (e.target !== e.currentTarget) return;
+  //     dispatch(setInactive());
+  //   });
+  //   return () => {
+  //     control.current?.removeEventListener("lock", (e: any) => {
+  //       if (e.target !== e.currentTarget) return;
+  //       dispatch(setActive());
+  //     });
+  //     control.current?.removeEventListener("unlock", (e: any) => {
+  //       if (e.target !== e.currentTarget) return;
+  //       dispatch(setInactive());
+  //     });
+  //   };
+  // });
+
+  return (
+    <PointerLockControls
+      ref={control}
+      onLock={(e) => {
+        dispatch(setActive());
+      }}
+      onUnlock={(e) => {
+        dispatch(setInactive());
+      }}
+    />
+  );
 };

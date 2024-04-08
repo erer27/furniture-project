@@ -47,12 +47,15 @@ const CanvasContainer = () => {
   }, []);
 
   return (
-    <div className="m-8 border-2 border-black w-[48rem] h-[32rem] flex justify-center items-center relative">
+    <div className="flex-1 rounded-md m-1 flex justify-center items-center relative overflow-hidden ">
       <img
         className={`w-2 h-2 fixed block z-10 ${crossHairHidden}`}
         src="crosshair.png"
       />
-      <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 5] }}>
+      <Canvas
+        camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 5] }}
+        className="outline-none border-none"
+      >
         <ObjectContainer />
       </Canvas>
     </div>
