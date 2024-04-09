@@ -1,5 +1,7 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import Card from "./Card";
+import { setFurnitureModalState } from "./FurnitureModal";
 
 const FurnitureBoardList = () => {
   const arr = Array.from({ length: 15 }, (_, index) => index);
@@ -15,7 +17,9 @@ const FurnitureBoardList = () => {
 };
 
 const AddButton = () => {
+  const dispatch = useDispatch();
   const handleClick = () => {
+    dispatch(setFurnitureModalState(true));
     console.log("addbutton");
   };
   return (
@@ -28,8 +32,7 @@ const AddButton = () => {
       xmlnsXlink="http://www.w3.org/1999/xlink"
       enable-background="new 0 0 512 512"
       viewBox="0 0 512 512"
-      className=" fixed bottom-0 right-0 mb-4 mr-4 fill-current text-red-300 hover:text-rose-400"
-      // className=" bottom-4 right-4 mb-4 mr-4 fill-current text-red-300 hover:text-rose-400"
+      className=" fixed bottom-0 right-0 mb-4 mr-4 fill-current text-red-300 hover:text-rose-400 hover:cursor-pointer"
       onClick={handleClick}
     >
       <g>

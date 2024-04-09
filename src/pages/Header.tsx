@@ -32,10 +32,6 @@ const SearchBox = () => {
     console.log("search");
   };
   return (
-    // <input
-    //   type="text"
-    //   className="border border-2 border-black flex-grow max-w-80"
-    // />
     <label className="relative block w-80 flex">
       <span className="sr-only">Search</span>
 

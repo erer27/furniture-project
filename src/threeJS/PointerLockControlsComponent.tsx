@@ -41,29 +41,13 @@ export const PointerLockControlsComponent = () => {
     dispatch(setInactive());
   };
 
-  // useEffect(() => {
-  //   control.current?.addEventListener("lock", (e: any) => {
-  //     if (e.target !== e.currentTarget) return;
-  //     dispatch(setActive());
-  //   });
-  //   control.current?.addEventListener("unlock", (e: any) => {
-  //     if (e.target !== e.currentTarget) return;
-  //     dispatch(setInactive());
-  //   });
-  //   return () => {
-  //     control.current?.removeEventListener("lock", (e: any) => {
-  //       if (e.target !== e.currentTarget) return;
-  //       dispatch(setActive());
-  //     });
-  //     control.current?.removeEventListener("unlock", (e: any) => {
-  //       if (e.target !== e.currentTarget) return;
-  //       dispatch(setInactive());
-  //     });
-  //   };
-  // });
+  useEffect(() => {
+    console.log(control.current?.domElement);
+  });
 
   return (
     <PointerLockControls
+      selector="#controlButton"
       ref={control}
       onLock={(e) => {
         dispatch(setActive());
