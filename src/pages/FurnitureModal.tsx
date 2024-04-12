@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../Reducer";
 import CanvasContainer from "../threeJS/CanvasContainer";
 
 const initialState = {
@@ -35,10 +36,16 @@ const FurnitureModal = () => {
 
     dispatch(setFurnitureModalState(false));
   };
+
+  const isFurnitureModalOpen = useSelector((state: RootState) => {
+    return state.furnitureModal.isFurnitureModalOpen;
+  });
+
+  const display = isFurnitureModalOpen ? "" : "hidden";
   return (
     <div
       onClick={handleClick}
-      className="fixed w-full h-full bg-black bg-opacity-50 z-50 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      className={`fixed w-full h-full bg-black bg-opacity-50 z-50 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${display}`}
     >
       <div
         className="fixed bg-white w-3/5 h-4/5 rounded-md transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col"

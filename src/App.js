@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainPage from "./pages/MinaPage";
 import CanvasContainer from "./threeJS/CanvasContainer";
 import FurnitureModal from "./pages/FurnitureModal";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path=":cardId" element={<CanvasContainer />} />
         </Route>
         <Route path="/test" element={<FurnitureModal />}></Route>
+        <Route path="/login" element={<LoginPage />}></Route>
       </Routes>
     </BrowserRouter>
   );

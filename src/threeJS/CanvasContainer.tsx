@@ -1,6 +1,5 @@
-import { Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Reducer";
 
@@ -35,23 +34,13 @@ export const furnitureInfoReducer = furnitureInfoSlice.reducer;
 const CanvasContainer = () => {
   const dispatch = useDispatch();
 
-  const PointerLockControlsState = useSelector((state: RootState) => {
-    //true가 활성화 false가 비활성화
-    return state.pointerLockControls.controlsState;
-  });
-
-  const crossHairHidden = PointerLockControlsState ? "" : "hidden";
-
   useEffect(() => {
     dispatch(setFurnitureInfo(debugFurniture));
   }, []);
 
   return (
     <div className="flex-1 rounded-md m-1 flex justify-center items-center relative overflow-hidden ">
-      <img
-        className={`w-2 h-2 fixed block z-10 ${crossHairHidden}`}
-        src="crosshair.png"
-      />
+      <CorssHairDot />
       <Canvas
         camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 5] }}
         className="outline-none border-none"
@@ -59,6 +48,27 @@ const CanvasContainer = () => {
         <ObjectContainer />
       </Canvas>
     </div>
+  );
+};
+
+const CorssHairDot = () => {
+  const PointerLockControlsState = useSelector((state: RootState) => {
+    //true가 활성화 false가 비활성화
+    return state.pointerLockControls.controlsState;
+  });
+
+  const crossHairHidden = PointerLockControlsState ? "" : "hidden";
+  return (
+    <svg
+      fill="#A4A4A4"
+      width="40px"
+      height="40px"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+      className={`fixed block z-10 ${crossHairHidden}`}
+    >
+      <path d="M7.8 10a2.2 2.2 0 0 0 4.4 0 2.2 2.2 0 0 0-4.4 0z" />
+    </svg>
   );
 };
 

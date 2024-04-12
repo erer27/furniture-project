@@ -5,7 +5,7 @@ const Header = () => {
     <div className=" p-2 flex justify-between items-center w-full fixed bg-white top-0 z-10">
       <Logo />
       <SearchBox />
-      <NickName />
+      <LoginButton />
     </div>
   );
 };
@@ -13,6 +13,14 @@ const Header = () => {
 const NickName = () => {
   const tmpId = "oksdfn";
   return <div className="flex-none">{tmpId}</div>;
+};
+
+const LoginButton = () => {
+  return (
+    <div className="w-14 h-6 bg-sky-400 text-white text-xs flex items-center justify-center rounded hover:cursor-pointer hover:bg-sky-500">
+      로그인
+    </div>
+  );
 };
 
 const SearchBox = () => {

@@ -7,15 +7,11 @@ import Header from "./Header";
 import FurnitureModal from "./FurnitureModal";
 
 const MinaPage = () => {
-  const isFurnitureModalOpen = useSelector((state: RootState) => {
-    return state.furnitureModal.isFurnitureModalOpen;
-  });
-
   return (
     <div className="flex items-center justify-center ">
       <Header />
       <FurnitureBoardList />
-      {isFurnitureModalOpen && <FurnitureModal />}
+      <FurnitureModal />
     </div>
   );
 };

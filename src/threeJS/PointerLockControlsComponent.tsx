@@ -28,27 +28,9 @@ export const pointerLockControlsReducer = PointerLockControlsSlice.reducer;
 export const PointerLockControlsComponent = () => {
   const dispatch = useDispatch();
 
-  const control = useRef<any>();
-
-  useKey(control);
-
-  const handleLock = (e: any) => {
-    e.stopPropagation();
-    dispatch(setActive());
-  };
-  const handleUnLock = (e: any) => {
-    e.stopPropagation();
-    dispatch(setInactive());
-  };
-
-  useEffect(() => {
-    console.log(control.current?.domElement);
-  });
-
   return (
     <PointerLockControls
       selector="#controlButton"
-      ref={control}
       onLock={(e) => {
         dispatch(setActive());
       }}
