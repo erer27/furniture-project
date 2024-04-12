@@ -48,7 +48,7 @@ const FurnitureModal = () => {
       className={`fixed w-full h-full bg-black bg-opacity-50 z-50 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${display}`}
     >
       <div
-        className="fixed bg-white w-3/5 h-4/5 rounded-md transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col"
+        className="fixed bg-white w-3/5 h-4/5 rounded-lg transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -68,17 +68,17 @@ const SubjectBar = () => {
     dispatch(setFurnitureModalState(false));
   };
   return (
-    <div className="h-12 bg-slate-200 rounded-t-md grow-0 flex items-center justify-between px-3">
+    <div className="h-12 bg-sky-300 rounded-t-md grow-0 flex items-center justify-between px-3 text-white">
       <div>
         <h1 className="text-lg">임시 제목</h1>
         <div className="flex text-xs">
           <span>작성자</span>
-          <span className="inline-block w-[1px] h-[10px] ml-4 mr-1 mt-1 bg-slate-400"></span>
+          <span className="inline-block w-[1px] h-[10px] ml-4 mr-1 mt-1 bg-white"></span>
           <span>0000:00:00:00:00:00</span>
         </div>
       </div>
       <svg
-        fill="#000000"
+        fill="white"
         height="20px"
         width="20px"
         version="1.1"
@@ -102,15 +102,15 @@ const SubjectBar = () => {
 
 const ButtonContainer = () => {
   return (
-    <div className="flex items-center justify-center bg-slate-200 h-8 rounded-b-lg">
-      <button className="rounded-md bg-slate-400 p-1 text-xs m-1 w-1/5">
+    <div className="flex items-center justify-center bg-sky-300 h-8 rounded-b-lg text-white">
+      <button className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5">
         삭제
       </button>
-      <button className="rounded-md bg-slate-400 p-1 text-xs m-1 w-1/5">
+      <button className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5">
         저장
       </button>
       <button
-        className="rounded-md bg-slate-400 p-1 text-xs m-1 w-1/5 outline-none border-none"
+        className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5 outline-none border-none"
         id="controlButton"
       >
         화면 조작

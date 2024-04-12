@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -16,8 +17,14 @@ const NickName = () => {
 };
 
 const LoginButton = () => {
+  const navigate = useNavigate();
   return (
-    <div className="w-14 h-6 bg-sky-400 text-white text-xs flex items-center justify-center rounded hover:cursor-pointer hover:bg-sky-500">
+    <div
+      className="w-14 h-6 bg-sky-400 text-white text-xs flex items-center justify-center rounded hover:cursor-pointer hover:bg-sky-500"
+      onClick={() => {
+        navigate("/login");
+      }}
+    >
       로그인
     </div>
   );
