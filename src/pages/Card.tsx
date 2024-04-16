@@ -39,7 +39,7 @@ const Card = () => {
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
       >
-        Tailwind 예제 페이지
+        FurnitureProject 임시 제목
         {/* {hover && <MenuIcon />} */}
       </div>
     </div>
