@@ -1,12 +1,17 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../Reducer";
 
 const Header = () => {
+  const member = useSelector((state: RootState) => {
+    return state.member;
+  });
   return (
     <div className=" p-2 flex justify-between items-center w-full fixed bg-white top-0 z-10">
       <Logo />
       <SearchBox />
-      <LoginButton />
+      {Object.keys(member).length === 0 ? <LoginButton /> : <NickName />}
     </div>
   );
 };
