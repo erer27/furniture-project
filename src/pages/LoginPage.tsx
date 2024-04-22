@@ -8,30 +8,8 @@ import { Member } from "./SignUpPage";
 const inputText =
   "bg-sky-200 border-b border-white text-sm focus:outline-none place font-sans text-sm   placeholder:text-white  bg-no-repeat bg-left pl-6 ";
 
-const initialState = {
-  member: {},
-};
-
-const memberSlice = createSlice({
-  name: "memberState",
-  initialState: initialState,
-  reducers: {
-    setMemberState: (
-      state: typeof initialState,
-      action: PayloadAction<Member>
-    ) => {
-      state.member = action.payload;
-    },
-  },
-});
-
-export const { setMemberState } = memberSlice.actions;
-
-export const memberReducer = memberSlice.reducer;
-
 const LoginPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [member, setMember] = useState<Member>({ id: "", password: "" });
 
   const submit = async () => {
@@ -43,11 +21,13 @@ const LoginPage = () => {
         alert("아이디 또는 비밀번호가 일치하지 않습니다.");
         return;
       }
-      const resultMember = {
-        id: response.data.id,
-        password: response.data.password,
-      } as Member;
-      dispatch(setMemberState(resultMember));
+      window.sessionStorage.setItem(
+        "member",
+        JSON.stringify({
+          id: response.data.id,
+          password: response.data.password,
+        })
+      );
       navigate("/");
     } catch (error) {
       console.log(error);

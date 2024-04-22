@@ -40,7 +40,8 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
   const position = new Vector3(...furnitureInfo.position);
   const rotation = new THREE.Euler(...furnitureInfo.rotation);
 
-  const { nodes, materials } = useGLTF(`./furnitures/${furnitureInfo.file}`);
+  const { nodes, materials } = useGLTF(`/furnitures/${furnitureInfo.file}`);
+  // const { nodes, materials } = useGLTF(`/furnitures/drawer_basic.glb`);
   const meshs = Object.values(nodes).filter((mesh) => mesh.type === "Mesh");
 
   const obj = useRef<any>();

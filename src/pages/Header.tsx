@@ -1,24 +1,36 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../Reducer";
+import { Member } from "./SignUpPage";
 
 const Header = () => {
-  const member = useSelector((state: RootState) => {
-    return state.member;
-  });
+  const [member, setMember] = useState<any>();
+
+  useEffect(() => {
+    const memberJSONstring = window.sessionStorage.getItem("member");
+    const member = JSON.parse(memberJSONstring ? memberJSONstring : "null");
+    setMember(member);
+  }, [member?.id]);
   return (
     <div className=" p-2 flex justify-between items-center w-full fixed bg-white top-0 z-10">
       <Logo />
       <SearchBox />
-      {Object.keys(member).length === 0 ? <LoginButton /> : <NickName />}
+      {member ? <NickName id={member.id} /> : <LoginButton />}
     </div>
   );
 };
 
-const NickName = () => {
-  const tmpId = "oksdfn";
-  return <div className="flex-none">{tmpId}</div>;
+type NickNameProps = { id: string };
+const NickName = ({ id }: NickNameProps) => {
+  return (
+    <div
+      className="flex-none w-12 text-right hover:cursor-pointer select-none mr-6"
+      onClick={() => {}}
+    >
+      abc
+    </div>
+  );
 };
 
 const LoginButton = () => {
@@ -90,7 +102,7 @@ const SearchBox = () => {
 };
 
 const Logo = () => {
-  return <div className="flex-none">FurnitureProject</div>;
+  return <div className="flex-none ml-6">FurnitureProject</div>;
 };
 
 export default Header;

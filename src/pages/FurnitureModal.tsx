@@ -27,9 +27,7 @@ export const furnitureModalReducer = furnitureModalSlice.reducer;
 
 const FurnitureModal = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log("modal");
-  });
+  useEffect(() => {});
 
   const handleClick = (e: any) => {
     if (e.target !== e.currentTarget) return;
