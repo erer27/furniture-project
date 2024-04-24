@@ -39,7 +39,10 @@ const CanvasContainer = () => {
   }, []);
 
   return (
-    <div className="flex-1 rounded-md m-1 flex justify-center items-center relative overflow-hidden ">
+    <div
+      className="flex-1 rounded-md m-1 flex justify-center items-center relative overflow-hidden "
+      id="controlButton"
+    >
       <CorssHairDot />
       <Canvas
         camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 5] }}

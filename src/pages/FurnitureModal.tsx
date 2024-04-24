@@ -107,12 +107,6 @@ const ButtonContainer = () => {
       <button className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5">
         저장
       </button>
-      <button
-        className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5 outline-none border-none"
-        id="controlButton"
-      >
-        화면 조작
-      </button>
     </div>
   );
 };

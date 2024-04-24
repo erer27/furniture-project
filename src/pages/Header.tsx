@@ -23,12 +23,69 @@ const Header = () => {
 
 type NickNameProps = { id: string };
 const NickName = ({ id }: NickNameProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div
       className="flex-none w-12 text-right hover:cursor-pointer select-none mr-6"
-      onClick={() => {}}
+      onClick={(e) => {
+        if (e.target !== e.currentTarget) return;
+        setIsModalOpen((prev: boolean) => {
+          return !prev;
+        });
+      }}
     >
-      abc
+      {id}
+      {isModalOpen && <UserModal />}
+    </div>
+  );
+};
+
+const UserModal = () => {
+  const [isLogoutAlertModalOpen, setIsLogoutAlertModalOpen] = useState(false);
+  const handleLogout = () => {
+    window.sessionStorage.removeItem("member");
+    window.location.reload();
+  };
+
+  const LogoutAlertModal = () => {
+    return (
+      <div
+        className={`fixed w-full h-full bg-black bg-opacity-50 z-50 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2`}
+      >
+        <div className="fixed bg-white w-1/4 h-1/4 rounded transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col text-left gap-4">
+          <div className="mt-4 ml-4 font-bold">로그아웃 하시겠어요?</div>
+          <div className="mt-1 flex items-center justify-center gap-1">
+            <button
+              className="w-20 h-6 text-xs  bg-slate-300"
+              onClick={() => {
+                setIsLogoutAlertModalOpen(false);
+              }}
+            >
+              취소
+            </button>
+            <button
+              className="w-20 h-6 text-xs text-white bg-sky-400"
+              onClick={handleLogout}
+            >
+              로그아웃
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="fixed">
+      <div
+        className="w-20 h-6 bg-sky-200 fixed rounded transform -translate-x-1/3 flex items-center justify-center text-white text-xs hover:bg-sky-300"
+        onClick={() => {
+          setIsLogoutAlertModalOpen(true);
+        }}
+      >
+        로그아웃
+      </div>
+      {isLogoutAlertModalOpen && <LogoutAlertModal />}
     </div>
   );
 };
@@ -37,7 +94,7 @@ const LoginButton = () => {
   const navigate = useNavigate();
   return (
     <div
-      className="w-14 h-6 bg-sky-400 text-white text-xs flex items-center justify-center rounded hover:cursor-pointer hover:bg-sky-500"
+      className="w-14 h-6 bg-sky-400 text-white text-xs flex items-center justify-center rounded hover:cursor-pointer hover:bg-sky-500 mr-6"
       onClick={() => {
         navigate("/login");
       }}
