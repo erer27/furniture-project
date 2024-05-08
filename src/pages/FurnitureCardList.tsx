@@ -1,14 +1,33 @@
-import React from "react";
+import axios from "axios";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import getMemberFromSession from "../utils/getMemberFromSession";
 import Card from "./Card";
-import { setFurnitureModalState } from "./FurnitureModal";
+import { setFurnitureModalState, setIsNewPost } from "./FurnitureModal";
 
 const FurnitureBoardList = () => {
   const arr = Array.from({ length: 15 }, (_, index) => index);
+  const [cardList, setCardList] = useState<[]>([]);
+
+  const submit = async () => {
+    const member = getMemberFromSession();
+    try {
+      const response = await axios.post("/cardList", member);
+      setCardList(response.data);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    submit();
+  }, [cardList.length]);
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 p-8 md:grid-cols-3 xl:grid-cols-6 gap-8 m-10">
-      {arr.map(() => (
-        <Card />
+      {cardList.map((cardData) => (
+        <Card PostData={cardData} />
       ))}
 
       <AddButton />
@@ -20,7 +39,7 @@ const AddButton = () => {
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch(setFurnitureModalState(true));
-    console.log("addbutton");
+    dispatch(setIsNewPost(true));
   };
   return (
     <svg

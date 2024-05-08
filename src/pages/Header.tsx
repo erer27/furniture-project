@@ -2,21 +2,20 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../Reducer";
+import getMemberFromSession from "../utils/getMemberFromSession";
 import { Member } from "./SignUpPage";
 
 const Header = () => {
   const [member, setMember] = useState<any>();
 
   useEffect(() => {
-    const memberJSONstring = window.sessionStorage.getItem("member");
-    const member = JSON.parse(memberJSONstring ? memberJSONstring : "null");
-    setMember(member);
+    setMember(getMemberFromSession());
   }, [member?.id]);
   return (
     <div className=" p-2 flex justify-between items-center w-full fixed bg-white top-0 z-10">
       <Logo />
       <SearchBox />
-      {member ? <NickName id={member.id} /> : <LoginButton />}
+      {member?.id ? <NickName id={member.id} /> : <LoginButton />}
     </div>
   );
 };

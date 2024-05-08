@@ -40,7 +40,7 @@ const CanvasContainer = () => {
 
   return (
     <div
-      className="flex-1 rounded-md m-1 flex justify-center items-center relative overflow-hidden "
+      className="flex-1 rounded-md m-1 flex justify-center items-center relative overflow-hidden outline-none border-none"
       id="controlButton"
     >
       <CorssHairDot />

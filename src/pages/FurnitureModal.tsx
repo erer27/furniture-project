@@ -1,11 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import React, { useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Reducer";
 import CanvasContainer from "../threeJS/CanvasContainer";
+import getMemberFromSession from "../utils/getMemberFromSession";
+import { PostData, defaultPostData, samplePostData } from "./samplePostJSON";
 
 const initialState = {
   isFurnitureModalOpen: false,
+  isNewPost: true,
+  furnitureData: defaultPostData,
 };
 
 const furnitureModalSlice = createSlice({
@@ -18,18 +23,37 @@ const furnitureModalSlice = createSlice({
     ) => {
       state.isFurnitureModalOpen = action.payload;
     },
+    setIsNewPost: (
+      state: typeof initialState,
+      action: PayloadAction<boolean>
+    ) => {
+      state.isNewPost = action.payload;
+    },
+    setFurnitureData: (
+      state: typeof initialState,
+      action: PayloadAction<PostData>
+    ) => {
+      state.furnitureData = action.payload;
+    },
   },
 });
 
-export const { setFurnitureModalState } = furnitureModalSlice.actions;
+export const { setFurnitureModalState, setIsNewPost, setFurnitureData } =
+  furnitureModalSlice.actions;
 
 export const furnitureModalReducer = furnitureModalSlice.reducer;
 
 const FurnitureModal = () => {
+  const modalData = useSelector((state: RootState) => {
+    return state.furnitureModal.furnitureData;
+  });
   const dispatch = useDispatch();
-  useEffect(() => {});
 
-  const handleClick = (e: any) => {
+  useEffect(() => {
+    console.log(modalData);
+  });
+
+  const handleClickBackground = (e: any) => {
     if (e.target !== e.currentTarget) return;
 
     dispatch(setFurnitureModalState(false));
@@ -39,11 +63,25 @@ const FurnitureModal = () => {
     return state.furnitureModal.isFurnitureModalOpen;
   });
 
+  const [editingTitle, setEditingTitle] = useState<string>("");
+
   const display = isFurnitureModalOpen ? "" : "hidden";
+
+  const member = getMemberFromSession();
+
+  const editData = {
+    writer: member.id,
+    title: editingTitle,
+    furnitureData: JSON.stringify(
+      useSelector((state: RootState) => {
+        return state.furnitureInfo.allFurnitureInfo;
+      })
+    ),
+  };
   return (
     <div
-      onClick={handleClick}
-      className={`fixed w-full h-full bg-black bg-opacity-50 z-50 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${display}`}
+      onClick={handleClickBackground}
+      className={`fixed w-full h-full bg-black bg-opacity-50 z-50 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${display}`} //반투명 배경
     >
       <div
         className="fixed bg-white w-3/5 h-4/5 rounded-lg transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col"
@@ -51,30 +89,74 @@ const FurnitureModal = () => {
           e.stopPropagation();
         }}
       >
-        <SubjectBar />
+        <TitleBar modalData={modalData} setEditingTitle={setEditingTitle} />
         <CanvasContainer />
-        <ButtonContainer />
+        <ButtonContainer editData={editData} />
       </div>
     </div>
   );
 };
 
-const SubjectBar = () => {
+type TitleBarProps = {
+  modalData: PostData;
+  setEditingTitle: React.Dispatch<React.SetStateAction<string>>;
+};
+const TitleBar = ({ modalData, setEditingTitle }: TitleBarProps) => {
+  const isNewPost = useSelector((state: RootState) => {
+    return state.furnitureModal.isNewPost;
+  });
+
+  const modalState = useSelector((state: RootState) => {
+    return state.furnitureModal.isFurnitureModalOpen;
+  });
   const dispatch = useDispatch();
 
+  const titleRef = useRef<any>();
+
+  useEffect(() => {
+    console.log(titleRef);
+  }, [modalState]);
+
   const handleClose = () => {
+    console.log(modalData);
     dispatch(setFurnitureModalState(false));
   };
   return (
-    <div className="h-12 bg-sky-300 rounded-t-md grow-0 flex items-center justify-between px-3 text-white">
-      <div>
-        <h1 className="text-lg">임시 제목</h1>
-        <div className="flex text-xs">
-          <span>작성자</span>
-          <span className="inline-block w-[1px] h-[10px] ml-4 mr-1 mt-1 bg-white"></span>
-          <span>0000:00:00:00:00:00</span>
+    <div className="h-12 bg-sky-300 rounded-t-md grow-0 flex items-center justify-between px-3 text-white w-full">
+      {modalState && (
+        <div className="w-full">
+          {isNewPost ? (
+            <input
+              type="text"
+              className="text-lg bg-inherit w-full focus:border-none focus:outline-none"
+              defaultValue=""
+              placeholder="제목"
+              onChange={(e) => {
+                setEditingTitle(e.target.value);
+              }}
+            />
+          ) : (
+            <input
+              ref={titleRef}
+              type="text"
+              className="text-lg bg-inherit w-full focus:border-none focus:outline-none"
+              defaultValue={modalData.title}
+              onChange={(e) => {
+                setEditingTitle(e.target.value);
+              }}
+            />
+          )}
+
+          {!isNewPost && (
+            <div className="flex text-xs">
+              <span>{modalData.writer}</span>
+              <span className="inline-block w-[1px] h-[10px] ml-4 mr-1 mt-1 bg-white"></span>
+              <span>{modalData.createdAt}</span>
+            </div>
+          )}
         </div>
-      </div>
+      )}
+
       <svg
         fill="white"
         height="20px"
@@ -98,13 +180,29 @@ const SubjectBar = () => {
   );
 };
 
-const ButtonContainer = () => {
+type ButtonContainerProps = { editData: any };
+const ButtonContainer = ({ editData }: ButtonContainerProps) => {
+  const submit = async () => {
+    try {
+      const response = await axios.post("/savePost", editData);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSave = () => {
+    submit();
+  };
   return (
     <div className="flex items-center justify-center bg-sky-300 h-8 rounded-b-lg text-white">
       <button className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5">
         삭제
       </button>
-      <button className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5">
+      <button
+        className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5"
+        onClick={handleSave}
+      >
         저장
       </button>
     </div>

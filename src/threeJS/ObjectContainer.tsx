@@ -6,8 +6,14 @@ import FurnitureContainer from "./FurnitureContainer";
 
 import { PointerLockControlsComponent } from "./PointerLockControlsComponent";
 import { furnitureInfo } from "./FurnitureInfo";
+import { useSelector } from "react-redux";
+import { RootState } from "../Reducer";
 
 const ObjectContainer = () => {
+  const controlState = useSelector((state: RootState) => {
+    //true가 활성화 false가 비활성화
+    return state.pointerLockControls.controlsState;
+  });
   const control = useRef<any>();
 
   //useKey(control.current);
@@ -27,7 +33,9 @@ const ObjectContainer = () => {
 
   return (
     <group>
-      <FlyControls dragToLook={true} movementSpeed={10} ref={control} />
+      {controlState && (
+        <FlyControls dragToLook={true} movementSpeed={10} ref={control} />
+      )}
       <PointerLockControlsComponent />
       <ambientLight intensity={1} />
       <directionalLight position={[-1, 0, 1]} />

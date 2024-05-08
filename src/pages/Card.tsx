@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { Dispatch, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import tmpImage from "../images/tmpImage.png";
 import { RootState } from "../Reducer";
-import { setFurnitureModalState } from "./FurnitureModal";
+import {
+  setFurnitureData,
+  setFurnitureModalState,
+  setIsNewPost,
+} from "./FurnitureModal";
+import { PostData } from "./samplePostJSON";
 
-const Card = () => {
+type CardProps = { PostData: PostData };
+const Card = ({ PostData }: CardProps) => {
   const box = "rounded-md bg-white";
   const isFurnitureModalOpen = useSelector((state: RootState) => {
     return state.furnitureModal.isFurnitureModalOpen;
@@ -26,6 +32,8 @@ const Card = () => {
   const openModal = () => {
     console.log(isFurnitureModalOpen);
     dispatch(setFurnitureModalState(true));
+    dispatch(setIsNewPost(false));
+    dispatch(setFurnitureData(PostData));
   };
 
   return (
@@ -39,7 +47,7 @@ const Card = () => {
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
       >
-        FurnitureProject 임시 제목
+        {PostData.title}
         {/* {hover && <MenuIcon />} */}
       </div>
     </div>
