@@ -1,6 +1,14 @@
 import debugFurniture from "../threeJS/DebugFurniture";
 
-export type PostData = typeof samplePostData;
+import { Member } from "./SignUpPage";
+
+export type PostData = {
+  postId: number | null;
+  title: string;
+  writer: Member;
+  createdAt: string;
+  furnitureData: string;
+};
 
 export const samplePostData = {
   postId: 100,
@@ -11,9 +19,9 @@ export const samplePostData = {
 };
 
 export const defaultPostData = {
-  postId: 101,
+  postId: null,
   title: "",
-  writer: "",
+  writer: { id: null, password: null },
   createdAt: "",
-  furnitureData: "",
+  furnitureData: JSON.stringify(debugFurniture),
 } as PostData;

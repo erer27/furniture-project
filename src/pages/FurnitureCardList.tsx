@@ -3,7 +3,12 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import getMemberFromSession from "../utils/getMemberFromSession";
 import Card from "./Card";
-import { setFurnitureModalState, setIsNewPost } from "./FurnitureModal";
+import {
+  setFurnitureData,
+  setFurnitureModalState,
+  setIsNewPost,
+} from "./FurnitureModal";
+import { defaultPostData } from "./samplePostJSON";
 
 const FurnitureBoardList = () => {
   const arr = Array.from({ length: 15 }, (_, index) => index);
@@ -14,7 +19,6 @@ const FurnitureBoardList = () => {
     try {
       const response = await axios.post("/cardList", member);
       setCardList(response.data);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -40,6 +44,7 @@ const AddButton = () => {
   const handleClick = () => {
     dispatch(setFurnitureModalState(true));
     dispatch(setIsNewPost(true));
+    dispatch(setFurnitureData(defaultPostData));
   };
   return (
     <svg

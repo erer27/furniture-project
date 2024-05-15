@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Reducer";
 import CanvasContainer from "../threeJS/CanvasContainer";
+import { furnitureInfo } from "../threeJS/FurnitureInfo";
 import getMemberFromSession from "../utils/getMemberFromSession";
 import { PostData, defaultPostData, samplePostData } from "./samplePostJSON";
 
@@ -21,19 +22,19 @@ const furnitureModalSlice = createSlice({
       state: typeof initialState,
       action: PayloadAction<boolean>
     ) => {
-      state.isFurnitureModalOpen = action.payload;
+      state.isFurnitureModalOpen = action.payload; //모달 열건지 안열건지
     },
     setIsNewPost: (
       state: typeof initialState,
       action: PayloadAction<boolean>
     ) => {
-      state.isNewPost = action.payload;
+      state.isNewPost = action.payload; //새 게시물인지 아닌지
     },
     setFurnitureData: (
       state: typeof initialState,
       action: PayloadAction<PostData>
     ) => {
-      state.furnitureData = action.payload;
+      state.furnitureData = action.payload; //post id, 가구 데이터 등
     },
   },
 });
@@ -49,9 +50,19 @@ const FurnitureModal = () => {
   });
   const dispatch = useDispatch();
 
+  const [furnitureDataJSON, setFurnitureDataJSON] = useState<furnitureInfo[]>(
+    []
+  );
+
   useEffect(() => {
     console.log(modalData);
-  });
+    setEditingTitle(modalData.title);
+    setFurnitureDataJSON(
+      JSON.parse(
+        modalData.furnitureData.length === 0 ? "[]" : modalData.furnitureData
+      )
+    );
+  }, [modalData]);
 
   const handleClickBackground = (e: any) => {
     if (e.target !== e.currentTarget) return;
@@ -63,21 +74,50 @@ const FurnitureModal = () => {
     return state.furnitureModal.isFurnitureModalOpen;
   });
 
-  const [editingTitle, setEditingTitle] = useState<string>("");
+  const [editingTitle, setEditingTitle] = useState<string>(modalData.title);
 
   const display = isFurnitureModalOpen ? "" : "hidden";
 
   const member = getMemberFromSession();
 
-  const editData = {
-    writer: member.id,
-    title: editingTitle,
-    furnitureData: JSON.stringify(
-      useSelector((state: RootState) => {
-        return state.furnitureInfo.allFurnitureInfo;
-      })
-    ),
+  const furnitureDataString = JSON.stringify(
+    useSelector((state: RootState) => {
+      return state.furnitureInfo.allFurnitureInfo;
+    })
+  );
+
+  const handleSave = async () => {
+    try {
+      const editData = {
+        postId: modalData.postId,
+        writer: { id: member.id, password: null },
+        title: editingTitle,
+        furnitureData: furnitureDataString,
+      } as PostData;
+      console.log(editData.furnitureData);
+      const response = await axios.post("/savePost", editData);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const handleDelete = async () => {
+    try {
+      const editData = {
+        postId: modalData.postId,
+        writer: { id: member.id, password: null },
+        title: editingTitle,
+        furnitureData: furnitureDataString,
+      } as PostData;
+      console.log(editData);
+      const response = await axios.post("/deletePost", editData);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       onClick={handleClickBackground}
@@ -90,8 +130,8 @@ const FurnitureModal = () => {
         }}
       >
         <TitleBar modalData={modalData} setEditingTitle={setEditingTitle} />
-        <CanvasContainer />
-        <ButtonContainer editData={editData} />
+        <CanvasContainer furnitureInfo={furnitureDataJSON} />
+        <ButtonContainer handleSave={handleSave} handleDelete={handleDelete} />
       </div>
     </div>
   );
@@ -113,14 +153,25 @@ const TitleBar = ({ modalData, setEditingTitle }: TitleBarProps) => {
 
   const titleRef = useRef<any>();
 
-  useEffect(() => {
-    console.log(titleRef);
-  }, [modalState]);
+  useEffect(() => {}, [modalState]);
 
   const handleClose = () => {
     console.log(modalData);
     dispatch(setFurnitureModalState(false));
   };
+
+  const createdAt = new Date(modalData.createdAt);
+  const createdAtString =
+    createdAt.getFullYear() +
+    "." +
+    ("0" + (createdAt.getMonth() + 1)).slice(-2) +
+    "." +
+    ("0" + createdAt.getDate()).slice(-2) +
+    " " +
+    createdAt.getHours() +
+    ":" +
+    createdAt.getMinutes();
+
   return (
     <div className="h-12 bg-sky-300 rounded-t-md grow-0 flex items-center justify-between px-3 text-white w-full">
       {modalState && (
@@ -149,9 +200,9 @@ const TitleBar = ({ modalData, setEditingTitle }: TitleBarProps) => {
 
           {!isNewPost && (
             <div className="flex text-xs">
-              <span>{modalData.writer}</span>
+              <span>{modalData.writer.id}</span>
               <span className="inline-block w-[1px] h-[10px] ml-4 mr-1 mt-1 bg-white"></span>
-              <span>{modalData.createdAt}</span>
+              <span>{createdAtString}</span>
             </div>
           )}
         </div>
@@ -180,25 +231,35 @@ const TitleBar = ({ modalData, setEditingTitle }: TitleBarProps) => {
   );
 };
 
-type ButtonContainerProps = { editData: any };
-const ButtonContainer = ({ editData }: ButtonContainerProps) => {
-  const submit = async () => {
-    try {
-      const response = await axios.post("/savePost", editData);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleSave = () => {
-    submit();
-  };
+type ButtonContainerProps = { handleSave: any; handleDelete: any };
+const ButtonContainer = ({
+  handleSave,
+  handleDelete,
+}: ButtonContainerProps) => {
+  const isNewPost = useSelector((state: RootState) => {
+    return state.furnitureModal.isNewPost;
+  });
+  const dispatch = useDispatch();
   return (
     <div className="flex items-center justify-center bg-sky-300 h-8 rounded-b-lg text-white">
-      <button className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5">
-        삭제
-      </button>
+      {isNewPost ? (
+        <button
+          className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5"
+          onClick={() => {
+            dispatch(setFurnitureModalState(false));
+          }}
+        >
+          취소
+        </button>
+      ) : (
+        <button
+          className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5"
+          onClick={handleDelete}
+        >
+          삭제
+        </button>
+      )}
+
       <button
         className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5"
         onClick={handleSave}

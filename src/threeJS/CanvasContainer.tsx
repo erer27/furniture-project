@@ -31,12 +31,14 @@ export const { setFurnitureInfo } = furnitureInfoSlice.actions;
 
 export const furnitureInfoReducer = furnitureInfoSlice.reducer;
 
-const CanvasContainer = () => {
+type CanvasContainerProps = { furnitureInfo: furnitureInfo[] };
+const CanvasContainer = ({ furnitureInfo }: CanvasContainerProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setFurnitureInfo(debugFurniture));
-  }, []);
+    console.log("canvascontainer rerendering");
+    dispatch(setFurnitureInfo(furnitureInfo));
+  }, [furnitureInfo]);
 
   return (
     <div

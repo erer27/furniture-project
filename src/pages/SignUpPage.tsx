@@ -6,8 +6,8 @@ const inputText =
   "bg-sky-200 border-b border-white text-sm focus:outline-none place font-sans text-sm   placeholder:text-white  bg-no-repeat bg-left pl-6 ";
 
 export type Member = {
-  id: string;
-  password: string;
+  id: string | null;
+  password: string | null;
 };
 
 const SignUpPage = () => {
