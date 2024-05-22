@@ -6,6 +6,7 @@ import { RootState } from "../Reducer";
 import CanvasContainer from "../threeJS/CanvasContainer";
 import { furnitureInfo } from "../threeJS/FurnitureInfo";
 import getMemberFromSession from "../utils/getMemberFromSession";
+import FurnitureListModal from "./FurnitureListModal";
 import { PostData, defaultPostData, samplePostData } from "./samplePostJSON";
 
 const initialState = {
@@ -123,8 +124,9 @@ const FurnitureModal = () => {
       onClick={handleClickBackground}
       className={`fixed w-full h-full bg-black bg-opacity-50 z-50 transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ${display}`} //반투명 배경
     >
+      <FurnitureListModal />
       <div
-        className="fixed bg-white w-3/5 h-4/5 rounded-lg transform top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col"
+        className="fixed bg-white w-3/5 h-4/5 rounded transform top-1/2 left-1/2 -translate-x-[40%] -translate-y-1/2 flex flex-col"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -160,20 +162,20 @@ const TitleBar = ({ modalData, setEditingTitle }: TitleBarProps) => {
     dispatch(setFurnitureModalState(false));
   };
 
-  const createdAt = new Date(modalData.createdAt);
-  const createdAtString =
-    createdAt.getFullYear() +
+  const createdDate = new Date(modalData.createdDate);
+  const createdDateString =
+    createdDate.getFullYear() +
     "." +
-    ("0" + (createdAt.getMonth() + 1)).slice(-2) +
+    ("0" + (createdDate.getMonth() + 1)).slice(-2) +
     "." +
-    ("0" + createdAt.getDate()).slice(-2) +
+    ("0" + createdDate.getDate()).slice(-2) +
     " " +
-    createdAt.getHours() +
+    createdDate.getHours() +
     ":" +
-    createdAt.getMinutes();
+    createdDate.getMinutes();
 
   return (
-    <div className="h-12 bg-sky-300 rounded-t-md grow-0 flex items-center justify-between px-3 text-white w-full">
+    <div className="h-12 bg-sky-300 rounded-t grow-0 flex items-center justify-between px-3 text-white w-full">
       {modalState && (
         <div className="w-full">
           {isNewPost ? (
@@ -202,7 +204,7 @@ const TitleBar = ({ modalData, setEditingTitle }: TitleBarProps) => {
             <div className="flex text-xs">
               <span>{modalData.writer.id}</span>
               <span className="inline-block w-[1px] h-[10px] ml-4 mr-1 mt-1 bg-white"></span>
-              <span>{createdAtString}</span>
+              <span>{createdDateString}</span>
             </div>
           )}
         </div>
@@ -241,7 +243,7 @@ const ButtonContainer = ({
   });
   const dispatch = useDispatch();
   return (
-    <div className="flex items-center justify-center bg-sky-300 h-8 rounded-b-lg text-white">
+    <div className="flex items-center justify-center bg-sky-300 h-8 rounded-b text-white">
       {isNewPost ? (
         <button
           className="rounded-md bg-sky-500 p-1 text-xs m-1 w-1/5"

@@ -195,7 +195,7 @@ type WarningProps = { isVisible: boolean; message: string };
 const Warning = ({ isVisible, message }: WarningProps) => {
   return (
     <div
-      className={`text-red-500 text-[8px] ${
+      className={`text-red-500 text-[8px] w-48 ${
         isVisible ? "visible" : "invisible"
       }`}
     >

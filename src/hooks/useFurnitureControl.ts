@@ -43,6 +43,9 @@ function useFurnitureControl(obj: any, pressedKey: any) {
           obj.position.x = obj.position.x + moveX;
           obj.position.z = obj.position.z + moveZ;
           furnitureInfoDispatch();
+        } else if (event.key === "Delete") {
+          console.log("delete");
+          furnitureDelete(obj.userData.file);
         }
       } else if (
         obj &&
@@ -96,6 +99,16 @@ function useFurnitureControl(obj: any, pressedKey: any) {
             };
           }
           return element;
+        })
+      )
+    );
+  }
+
+  function furnitureDelete(deletingFurniture: any) {
+    dispatch(
+      setFurnitureInfo(
+        allFurnitureInfo.filter((element) => {
+          return element.file !== deletingFurniture;
         })
       )
     );

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import getMemberFromSession from "../utils/getMemberFromSession";
 import Card from "./Card";
@@ -11,7 +11,7 @@ import {
 import { defaultPostData } from "./samplePostJSON";
 
 const FurnitureBoardList = () => {
-  const arr = Array.from({ length: 15 }, (_, index) => index);
+  // const arr = Array.from({ length: 15 }, (_, index) => index);
   const [cardList, setCardList] = useState<[]>([]);
 
   const submit = async () => {

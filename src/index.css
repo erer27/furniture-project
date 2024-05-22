@@ -15,3 +15,54 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+summary::-webkit-details-marker {
+  /* Safari 브라우저용 사용자 정의 스타일 */
+  display: none;
+}
+summary {
+  display: block; /* 그 외의 브라우저용 사용자 정의 스타일 */
+}
+/* 브라우저 호환을 위해서는 위 두 사용자 정의 스타일을 모두 지정해야 함 */
+
+/* 여기서부터는 details 화살표(marker) 커스텀으로 꾸미기  */
+summary {
+  position: relative;
+  padding-left: 1.2em;
+  cursor: pointer;
+}
+summary::before {
+  content: "";
+  position: absolute;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.6em solid rgb(255, 255, 255);
+  top: 0.5em;
+  left: 0;
+  transition: 0.25s transform;
+  margin-left: 0.3rem;
+}
+details[open] summary:before {
+  transform: rotateZ(90deg);
+}
