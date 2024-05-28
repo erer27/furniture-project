@@ -8,10 +8,9 @@ import { useGLTF } from "@react-three/drei";
 import { furnitureInfo } from "./FurnitureInfo";
 import { Vector3 } from "three";
 import useFurnitureControl from "../hooks/useFurnitureControl";
-import { useDispatch, UseDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import * as THREE from "three";
-import { ThreeEvent } from "@react-three/fiber";
 
 const initialState = {
   targetFurniture: "",

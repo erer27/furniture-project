@@ -1,5 +1,8 @@
 import React from "react";
 import { tab, tabs } from "./FurnitureListData";
+import { useDispatch, UseDispatch, useSelector } from "react-redux";
+import { setFurnitureInfo } from "../threeJS/CanvasContainer";
+import { RootState } from "../Reducer";
 
 const FurnitureListModal = () => {
   return (
@@ -17,14 +20,32 @@ const FurnitureListModal = () => {
 export default FurnitureListModal;
 
 const Tab = ({ tab_title, detail_element }: tab) => {
+  const allFurnitureInfo = useSelector((state: RootState) => {
+    return state.furnitureInfo.allFurnitureInfo;
+  });
+  const dispatch = useDispatch();
+  const addFurniture = () => {
+    const newFurnitureInfo = allFurnitureInfo.slice();
+
+    newFurnitureInfo.push({
+      file: "chair_ikea_odger.glb",
+      position: [0, 0, 0],
+      rotation: [0, 0, 0],
+    });
+    dispatch(setFurnitureInfo(newFurnitureInfo));
+  };
   return (
     <details className="bg-sky-300 text-white w-full">
       <summary>{tab_title}</summary>
       {detail_element.map((element) => {
         return (
           <div className="bg-white text-black border border-b-black">
-            <img src={element.image}></img>
-            <div className="text-center">{element.furniture_name}</div>
+            <img onClick={addFurniture} src={element.image}></img>
+            <div className="text-center">
+              <a href={element.link} target="_blank">
+                {element.furniture_name}
+              </a>
+            </div>
           </div>
         );
       })}
