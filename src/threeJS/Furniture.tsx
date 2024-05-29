@@ -13,7 +13,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import * as THREE from "three";
 
 const initialState = {
-  targetFurniture: "",
+  targetFurniture: -1,
 };
 
 const furnitureControlSlice = createSlice({
@@ -22,7 +22,7 @@ const furnitureControlSlice = createSlice({
   reducers: {
     setTargetFurniture: (
       state: typeof initialState,
-      action: PayloadAction<string>
+      action: PayloadAction<number>
     ) => {
       state.targetFurniture = action.payload;
     },
@@ -48,7 +48,7 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
   const dispatch = useDispatch();
 
   const handleClick = useCallback(() => {
-    dispatch(setTargetFurniture(furnitureInfo.file));
+    dispatch(setTargetFurniture(furnitureInfo.id));
   }, [dispatch]);
 
   const [pressedKey, setPressedKey] = useState({});
@@ -94,7 +94,7 @@ export default function Furniture({ furnitureInfo }: furnitureProps) {
         handleClick();
       }}
       rotation={rotation}
-      userData={{ file: furnitureInfo.file }}
+      userData={{ id: furnitureInfo.id }}
     >
       {meshs.map((mesh: any) => (
         <mesh

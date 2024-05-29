@@ -24,11 +24,16 @@ const Tab = ({ tab_title, detail_element }: tab) => {
     return state.furnitureInfo.allFurnitureInfo;
   });
   const dispatch = useDispatch();
-  const addFurniture = () => {
+  const addFurniture = (file: string) => {
     const newFurnitureInfo = allFurnitureInfo.slice();
+    const id =
+      newFurnitureInfo.length === 0
+        ? 0
+        : newFurnitureInfo[newFurnitureInfo.length - 1].id + 1;
 
     newFurnitureInfo.push({
-      file: "chair_ikea_odger.glb",
+      id: id,
+      file: file,
       position: [0, 0, 0],
       rotation: [0, 0, 0],
     });
@@ -40,7 +45,12 @@ const Tab = ({ tab_title, detail_element }: tab) => {
       {detail_element.map((element) => {
         return (
           <div className="bg-white text-black border border-b-black">
-            <img onClick={addFurniture} src={element.image}></img>
+            <img
+              onClick={() => {
+                addFurniture(element.file);
+              }}
+              src={element.image}
+            ></img>
             <div className="text-center">
               <a href={element.link} target="_blank">
                 {element.furniture_name}

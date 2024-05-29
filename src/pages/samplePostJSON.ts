@@ -23,5 +23,5 @@ export const defaultPostData = {
   title: "",
   writer: { id: null, password: null },
   createdDate: "",
-  furnitureData: JSON.stringify(debugFurniture),
+  furnitureData: JSON.stringify([]), //새 포스트에 가구 넣을거면 debugFurniture 아니면 []
 } as PostData;

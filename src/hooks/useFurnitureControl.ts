@@ -26,7 +26,7 @@ function useFurnitureControl(obj: any, pressedKey: any) {
   const dispatch = useDispatch();
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (obj && targetFurniture === obj.userData.file && !pressedKey.Shift) {
+      if (obj && targetFurniture === obj.userData.id && !pressedKey.Shift) {
         if (
           event.key === "ArrowRight" ||
           event.key === "ArrowLeft" ||
@@ -45,11 +45,11 @@ function useFurnitureControl(obj: any, pressedKey: any) {
           furnitureInfoDispatch();
         } else if (event.key === "Delete") {
           console.log("delete");
-          furnitureDelete(obj.userData.file);
+          furnitureDelete(obj.userData.id);
         }
       } else if (
         obj &&
-        targetFurniture === obj.userData.file &&
+        targetFurniture === obj.userData.id &&
         pressedKey.Shift
       ) {
         if (event.key === "ArrowRight") {
@@ -91,7 +91,7 @@ function useFurnitureControl(obj: any, pressedKey: any) {
     dispatch(
       setFurnitureInfo(
         allFurnitureInfo.map((element) => {
-          if (element.file === targetFurniture) {
+          if (element.id === targetFurniture) {
             return {
               ...element,
               position: [...obj.position],
@@ -108,7 +108,7 @@ function useFurnitureControl(obj: any, pressedKey: any) {
     dispatch(
       setFurnitureInfo(
         allFurnitureInfo.filter((element) => {
-          return element.file !== deletingFurniture;
+          return element.id !== deletingFurniture;
         })
       )
     );
