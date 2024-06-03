@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Reducer";
 
@@ -7,6 +7,7 @@ import ObjectContainer from "./ObjectContainer";
 import debugFurniture from "./DebugFurniture";
 import { furnitureInfo } from "./FurnitureInfo";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import html2canvas from "html2canvas";
 
 //리덕스로 가구 정보 가져오기
 
@@ -31,8 +32,14 @@ export const { setFurnitureInfo } = furnitureInfoSlice.actions;
 
 export const furnitureInfoReducer = furnitureInfoSlice.reducer;
 
-type CanvasContainerProps = { furnitureInfo: furnitureInfo[] };
-const CanvasContainer = ({ furnitureInfo }: CanvasContainerProps) => {
+type CanvasContainerProps = {
+  furnitureInfo: furnitureInfo[];
+  threeJSCanvasRef: React.MutableRefObject<any>;
+};
+const CanvasContainer = ({
+  furnitureInfo,
+  threeJSCanvasRef,
+}: CanvasContainerProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,6 +54,8 @@ const CanvasContainer = ({ furnitureInfo }: CanvasContainerProps) => {
     >
       <CorssHairDot />
       <Canvas
+        ref={threeJSCanvasRef}
+        gl={{ preserveDrawingBuffer: true }}
         camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 5] }}
         className="outline-none border-none"
       >

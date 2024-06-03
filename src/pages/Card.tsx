@@ -39,7 +39,10 @@ const Card = ({ PostData }: CardProps) => {
   return (
     <div className={box}>
       <div className="hover:cursor-pointer" onClick={openModal}>
-        <img className="rounded-md block" src={tmpImage}></img>
+        <img
+          className="rounded-md block w-52 h-28 object-cover"
+          src={tmpImage}
+        ></img>
       </div>
 
       <div

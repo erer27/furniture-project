@@ -1,13 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import html2canvas from "html2canvas";
+import saveAs from "file-saver";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { RootState } from "../Reducer";
 import CanvasContainer from "../threeJS/CanvasContainer";
 import { furnitureInfo } from "../threeJS/FurnitureInfo";
 import getMemberFromSession from "../utils/getMemberFromSession";
 import FurnitureListModal from "./FurnitureListModal";
 import { PostData, defaultPostData, samplePostData } from "./samplePostJSON";
+import { useThree } from "@react-three/fiber";
 
 const initialState = {
   isFurnitureModalOpen: false,
@@ -87,6 +91,43 @@ const FurnitureModal = () => {
     })
   );
 
+  const threeJSCanvasRef = useRef<any>();
+
+  const handleCapture = async (postId: any) => {
+    console.log(threeJSCanvasRef);
+    if (!threeJSCanvasRef.current) {
+      return;
+    }
+    const dataURL = threeJSCanvasRef.current.toDataURL("image/png");
+    console.log(dataURL);
+    const binaryString = atob(dataURL.split(",")[1]);
+    const arrayBuffer = new ArrayBuffer(binaryString.length);
+    const view = new Uint8Array(arrayBuffer);
+    for (let i = 0; i < binaryString.length; i++) {
+      view[i] = binaryString.charCodeAt(i) & 0xff;
+    }
+    const imageBlob = new Blob([arrayBuffer], { type: "image/png" });
+
+    try {
+      const response = await axios.post(
+        "/captureCardImage",
+        {
+          file: imageBlob,
+          postId: postId,
+        },
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      console.log(response);
+    } catch (error) {}
+
+    // const blobURL = URL.createObjectURL(imageBlob);
+    // const link = document.createElement("a");
+    // link.href = blobURL;
+    // link.download = "canvas_capture.png";
+    // console.log(link);
+    // link.click();
+  };
+
   const handleSave = async () => {
     try {
       const editData = {
@@ -97,6 +138,7 @@ const FurnitureModal = () => {
       } as PostData;
       console.log(editData.furnitureData);
       const response = await axios.post("/savePost", editData);
+      handleCapture(modalData.postId);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -132,7 +174,10 @@ const FurnitureModal = () => {
         }}
       >
         <TitleBar modalData={modalData} setEditingTitle={setEditingTitle} />
-        <CanvasContainer furnitureInfo={furnitureDataJSON} />
+        <CanvasContainer
+          furnitureInfo={furnitureDataJSON}
+          threeJSCanvasRef={threeJSCanvasRef}
+        />
         <ButtonContainer handleSave={handleSave} handleDelete={handleDelete} />
       </div>
     </div>

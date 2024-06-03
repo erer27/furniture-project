@@ -46,6 +46,7 @@ const Tab = ({ tab_title, detail_element }: tab) => {
         return (
           <div className="bg-white text-black border border-b-black">
             <img
+              className="hover:cursor-pointer"
               onClick={() => {
                 addFurniture(element.file);
               }}
