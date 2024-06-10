@@ -93,13 +93,13 @@ const FurnitureModal = () => {
 
   const threeJSCanvasRef = useRef<any>();
 
-  const handleCapture = async (postId: any) => {
+  const handleCapture = async (post: PostData) => {
     console.log(threeJSCanvasRef);
     if (!threeJSCanvasRef.current) {
       return;
     }
     const dataURL = threeJSCanvasRef.current.toDataURL("image/png");
-    console.log(dataURL);
+    console.log(post);
     const binaryString = atob(dataURL.split(",")[1]);
     const arrayBuffer = new ArrayBuffer(binaryString.length);
     const view = new Uint8Array(arrayBuffer);
@@ -113,7 +113,7 @@ const FurnitureModal = () => {
         "/captureCardImage",
         {
           file: imageBlob,
-          postId: postId,
+          post: post.postId,
         },
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -138,7 +138,7 @@ const FurnitureModal = () => {
       } as PostData;
       console.log(editData.furnitureData);
       const response = await axios.post("/savePost", editData);
-      handleCapture(modalData.postId);
+      handleCapture(editData);
       console.log(response);
     } catch (error) {
       console.log(error);

@@ -8,7 +8,7 @@ import {
   setFurnitureModalState,
   setIsNewPost,
 } from "./FurnitureModal";
-import { defaultPostData } from "./samplePostJSON";
+import { defaultPostData, PostData } from "./samplePostJSON";
 
 const FurnitureBoardList = () => {
   // const arr = Array.from({ length: 15 }, (_, index) => index);
@@ -17,8 +17,15 @@ const FurnitureBoardList = () => {
   const submit = async () => {
     const member = getMemberFromSession();
     try {
-      const response = await axios.post("/cardList", member);
-      setCardList(response.data);
+      const cardListResponse = await axios.post("/cardList", member);
+      console.log(cardListResponse);
+      const Posts = cardListResponse.data.map((post: PostData) => {
+        return post.postId;
+      });
+      console.log(Posts);
+      const cardImageResponse = await axios.post("/cardImages", Posts);
+      console.log(Posts);
+      setCardList(cardListResponse.data);
     } catch (error) {
       console.log(error);
     }
