@@ -113,12 +113,15 @@ const FurnitureModal = () => {
         "/captureCardImage",
         {
           file: imageBlob,
-          post: post.postId,
+          postId: post.postId,
+          imageName: post.cardImageName,
         },
         { headers: { "Content-Type": "multipart/form-data" } }
       );
       console.log(response);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
 
     // const blobURL = URL.createObjectURL(imageBlob);
     // const link = document.createElement("a");
@@ -134,11 +137,12 @@ const FurnitureModal = () => {
         postId: modalData.postId,
         writer: { id: member.id, password: null },
         title: editingTitle,
+        cardImageName: modalData.cardImageName,
         furnitureData: furnitureDataString,
       } as PostData;
       console.log(editData.furnitureData);
       const response = await axios.post("/savePost", editData);
-      handleCapture(editData);
+      handleCapture(response.data);
       console.log(response);
     } catch (error) {
       console.log(error);

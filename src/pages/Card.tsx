@@ -1,4 +1,5 @@
-import React, { Dispatch, useState } from "react";
+import axios from "axios";
+import React, { Dispatch, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import tmpImage from "../images/tmpImage.png";
@@ -16,6 +17,27 @@ const Card = ({ PostData }: CardProps) => {
   const isFurnitureModalOpen = useSelector((state: RootState) => {
     return state.furnitureModal.isFurnitureModalOpen;
   });
+
+  const [cardImage, setCardImage] = useState<any>();
+
+  const getCardImage = useCallback(async () => {
+    console.log(PostData.cardImageName);
+    const response = await axios.post(
+      "/cardImage",
+      {
+        imageName: PostData.cardImageName,
+      },
+
+      { responseType: "blob" }
+    );
+    console.log(response);
+    const url = window.URL.createObjectURL(response.data);
+    setCardImage(url);
+  }, [PostData]);
+
+  useEffect(() => {
+    getCardImage();
+  }, [getCardImage]);
 
   const [hover, setHover] = useState(false);
 
@@ -41,7 +63,7 @@ const Card = ({ PostData }: CardProps) => {
       <div className="hover:cursor-pointer" onClick={openModal}>
         <img
           className="rounded-md block w-52 h-28 object-cover"
-          src={tmpImage}
+          src={cardImage}
         ></img>
       </div>
 

@@ -6,6 +6,7 @@ export type PostData = {
   postId: number | null;
   title: string;
   writer: Member;
+  cardImageName: string | null;
   createdDate: string;
   furnitureData: string;
 };
@@ -22,6 +23,7 @@ export const defaultPostData = {
   postId: null,
   title: "",
   writer: { id: null, password: null },
+  cardImageName: null,
   createdDate: "",
   furnitureData: JSON.stringify([]), //새 포스트에 가구 넣을거면 debugFurniture 아니면 []
 } as PostData;

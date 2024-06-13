@@ -1,4 +1,5 @@
 import axios from "axios";
+import FileSaver from "file-saver";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import getMemberFromSession from "../utils/getMemberFromSession";
@@ -19,12 +20,6 @@ const FurnitureBoardList = () => {
     try {
       const cardListResponse = await axios.post("/cardList", member);
       console.log(cardListResponse);
-      const Posts = cardListResponse.data.map((post: PostData) => {
-        return post.postId;
-      });
-      console.log(Posts);
-      const cardImageResponse = await axios.post("/cardImages", Posts);
-      console.log(Posts);
       setCardList(cardListResponse.data);
     } catch (error) {
       console.log(error);
