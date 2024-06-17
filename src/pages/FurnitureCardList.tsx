@@ -1,6 +1,6 @@
 import axios from "axios";
 import FileSaver from "file-saver";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import getMemberFromSession from "../utils/getMemberFromSession";
 import Card from "./Card";
@@ -14,9 +14,9 @@ import { defaultPostData, PostData } from "./samplePostJSON";
 const FurnitureBoardList = () => {
   // const arr = Array.from({ length: 15 }, (_, index) => index);
   const [cardList, setCardList] = useState<[]>([]);
+  const member = getMemberFromSession();
 
-  const submit = async () => {
-    const member = getMemberFromSession();
+  const getCardList = useCallback(async () => {
     try {
       const cardListResponse = await axios.post("/cardList", member);
       console.log(cardListResponse);
@@ -24,11 +24,11 @@ const FurnitureBoardList = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [cardList.length]);
 
   useEffect(() => {
-    submit();
-  }, [cardList.length]);
+    getCardList();
+  }, [getCardList]);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 p-8 md:grid-cols-3 xl:grid-cols-6 gap-8 m-10">

@@ -44,7 +44,7 @@ const FurnitureContainer = () => {
         return (
           <Furniture
             furnitureInfo={furnitureInfo}
-            key={furnitureInfo.file}
+            key={furnitureInfo.id}
           ></Furniture>
         );
       })}

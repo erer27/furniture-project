@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import html2canvas from "html2canvas";
 import saveAs from "file-saver";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../Reducer";
@@ -93,45 +93,41 @@ const FurnitureModal = () => {
 
   const threeJSCanvasRef = useRef<any>();
 
-  const handleCapture = async (post: PostData) => {
-    console.log(threeJSCanvasRef);
-    if (!threeJSCanvasRef.current) {
-      return;
-    }
-    const dataURL = threeJSCanvasRef.current.toDataURL("image/png");
-    console.log(post);
-    const binaryString = atob(dataURL.split(",")[1]);
-    const arrayBuffer = new ArrayBuffer(binaryString.length);
-    const view = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < binaryString.length; i++) {
-      view[i] = binaryString.charCodeAt(i) & 0xff;
-    }
-    const imageBlob = new Blob([arrayBuffer], { type: "image/png" });
+  const handleCapture = useCallback(
+    async (post: PostData) => {
+      console.log(threeJSCanvasRef);
+      if (!threeJSCanvasRef.current) {
+        return;
+      }
+      const dataURL = threeJSCanvasRef.current.toDataURL("image/png");
+      console.log(post);
+      const binaryString = atob(dataURL.split(",")[1]);
+      const arrayBuffer = new ArrayBuffer(binaryString.length);
+      const view = new Uint8Array(arrayBuffer);
+      for (let i = 0; i < binaryString.length; i++) {
+        view[i] = binaryString.charCodeAt(i) & 0xff;
+      }
+      const imageBlob = new Blob([arrayBuffer], { type: "image/png" });
 
-    try {
-      const response = await axios.post(
-        "/captureCardImage",
-        {
-          file: imageBlob,
-          postId: post.postId,
-          imageName: post.cardImageName,
-        },
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
+      try {
+        const response = await axios.post(
+          "/captureCardImage",
+          {
+            file: imageBlob,
+            postId: post.postId,
+            imageName: post.cardImageName,
+          },
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [modalData.cardImageName]
+  );
 
-    // const blobURL = URL.createObjectURL(imageBlob);
-    // const link = document.createElement("a");
-    // link.href = blobURL;
-    // link.download = "canvas_capture.png";
-    // console.log(link);
-    // link.click();
-  };
-
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     try {
       const editData = {
         postId: modalData.postId,
@@ -147,14 +143,15 @@ const FurnitureModal = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [modalData]);
 
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     try {
       const editData = {
         postId: modalData.postId,
         writer: { id: member.id, password: null },
         title: editingTitle,
+        cardImageName: modalData.cardImageName,
         furnitureData: furnitureDataString,
       } as PostData;
       console.log(editData);
@@ -163,7 +160,7 @@ const FurnitureModal = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [modalData]);
 
   return (
     <div

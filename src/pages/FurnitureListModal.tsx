@@ -1,6 +1,5 @@
-import React from "react";
 import { tab, tabs } from "./FurnitureListData";
-import { useDispatch, UseDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setFurnitureInfo } from "../threeJS/CanvasContainer";
 import { RootState } from "../Reducer";
 
