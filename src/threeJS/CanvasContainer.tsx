@@ -56,7 +56,7 @@ const CanvasContainer = ({
       <Canvas
         ref={threeJSCanvasRef}
         gl={{ preserveDrawingBuffer: true }}
-        camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 0, 5] }}
+        camera={{ fov: 75, near: 0.1, far: 1000, position: [0, 1, 5] }}
         className="outline-none border-none"
       >
         <ObjectContainer />

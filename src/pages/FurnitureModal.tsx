@@ -100,8 +100,9 @@ const FurnitureModal = () => {
         return;
       }
       const dataURL = threeJSCanvasRef.current.toDataURL("image/png");
-      console.log(post);
+      console.log(dataURL);
       const binaryString = atob(dataURL.split(",")[1]);
+      console.log(binaryString);
       const arrayBuffer = new ArrayBuffer(binaryString.length);
       const view = new Uint8Array(arrayBuffer);
       for (let i = 0; i < binaryString.length; i++) {
@@ -136,14 +137,14 @@ const FurnitureModal = () => {
         cardImageName: modalData.cardImageName,
         furnitureData: furnitureDataString,
       } as PostData;
-      console.log(editData.furnitureData);
       const response = await axios.post("/savePost", editData);
-      handleCapture(response.data);
       console.log(response);
+      //dispatch(setFurnitureData(response.data));
+      handleCapture(response.data);
     } catch (error) {
       console.log(error);
     }
-  }, [modalData]);
+  }, [modalData, editingTitle, furnitureDataString]);
 
   const handleDelete = useCallback(async () => {
     try {
@@ -160,7 +161,7 @@ const FurnitureModal = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [modalData]);
+  }, [modalData, editingTitle, furnitureDataString]);
 
   return (
     <div

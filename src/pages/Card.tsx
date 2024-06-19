@@ -21,7 +21,6 @@ const Card = ({ PostData }: CardProps) => {
   const [cardImage, setCardImage] = useState<any>();
 
   const getCardImage = useCallback(async () => {
-    console.log(PostData.cardImageName);
     const response = await axios.post(
       "/cardImage",
       {
@@ -30,7 +29,6 @@ const Card = ({ PostData }: CardProps) => {
 
       { responseType: "blob" }
     );
-    console.log(response);
     const url = window.URL.createObjectURL(response.data);
     setCardImage(url);
   }, [PostData]);
