@@ -43,7 +43,6 @@ const CanvasContainer = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("canvascontainer rerendering");
     dispatch(setFurnitureInfo(furnitureInfo));
   }, [furnitureInfo]);
 

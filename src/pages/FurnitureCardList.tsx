@@ -23,7 +23,6 @@ const FurnitureBoardList = () => {
   const getFirstPageCardList = useCallback(async () => {
     try {
       const cardListResponse = await axios.post("/firstPageCardList", member);
-      console.log("firstpage");
       setCardList(cardListResponse.data);
     } catch (error) {
       console.log(error);
@@ -52,7 +51,6 @@ const FurnitureBoardList = () => {
     const target = entries[0];
     if (target.isIntersecting && !isLoading) {
       setPage((prevPage: number) => prevPage + 1);
-      console.log("page" + page);
     }
   };
 

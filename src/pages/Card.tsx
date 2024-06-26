@@ -50,7 +50,6 @@ const Card = ({ PostData }: CardProps) => {
   const dispatch = useDispatch();
 
   const openModal = () => {
-    console.log(isFurnitureModalOpen);
     dispatch(setFurnitureModalState(true));
     dispatch(setIsNewPost(false));
     dispatch(setFurnitureData(PostData));

@@ -60,7 +60,6 @@ const FurnitureModal = () => {
   );
 
   useEffect(() => {
-    console.log(modalData);
     setEditingTitle(modalData.title);
     setFurnitureDataJSON(
       JSON.parse(

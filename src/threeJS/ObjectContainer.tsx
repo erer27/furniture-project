@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { FlyControls } from "./flycontrols/FlyControls";
-import FloorPlane from "./Floor";
+import FloorPlane from "./CreateRoom";
 import useKey from "../hooks/useKey";
 import FurnitureContainer from "./FurnitureContainer";
 
