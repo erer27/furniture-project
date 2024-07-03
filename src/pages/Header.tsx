@@ -104,32 +104,7 @@ const LoginButton = () => {
   );
 };
 
-const initialState = {
-  searchKeyword: "",
-};
-
-type searchKeyword = {
-  searchKeyword: string | undefined;
-};
-const searchKeywordSlice = createSlice({
-  name: "searchKeywordRedux",
-  initialState: initialState,
-  reducers: {
-    setSearchKeyword: (
-      state: searchKeyword,
-      action: PayloadAction<string | undefined>
-    ) => {
-      state.searchKeyword = action.payload;
-    },
-  },
-});
-
-const { setSearchKeyword } = searchKeywordSlice.actions;
-
-export const SearchKeywordReducer = searchKeywordSlice.reducer;
-
 const SearchBox = () => {
-  const dispatch = useDispatch();
   const ref = useRef<any>();
 
   const { keyword } = useParams();
@@ -146,17 +121,12 @@ const SearchBox = () => {
 
   const [searchBoxWord, setSearchBoxWord] = useState<string | undefined>("");
 
-  // const searchKeyword = useSelector((state: RootState) => {
-  //   return state.searchKeyword.searchKeyword;
-  // });
-
   useEffect(() => {
     console.log(keyword);
     setSearchBoxWord(keyword);
   }, []);
 
   const handleClick = useCallback(() => {
-    dispatch(setSearchKeyword(searchBoxWord));
     window.location.replace(`/${searchBoxWord}`);
   }, [searchBoxWord]);
   return (

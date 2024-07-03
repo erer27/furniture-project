@@ -18,10 +18,6 @@ const FurnitureBoardList = () => {
   const [cardList, setCardList] = useState<any[]>([]);
   const [page, setPage] = useState<number>(0);
 
-  // const searchKeyword = useSelector((state: RootState) => {
-  //   return state.searchKeyword.searchKeyword;
-  // });
-
   const { keyword } = useParams();
 
   const observerRef = useRef<any>();

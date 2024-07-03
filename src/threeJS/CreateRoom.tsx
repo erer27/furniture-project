@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
 import { DoubleSide } from "three";
-import { Sphere, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 
 const roomSize = 7;
 const wallHeight = roomSize / 2.7;
@@ -106,11 +106,6 @@ const CreateWall = ({ rotation, position }: CreateWallProps) => {
     material: 0,
     extrudeMaterial: 1,
   };
-
-  const material = new THREE.MeshBasicMaterial({
-    color: 0xf0c400,
-    side: THREE.DoubleSide,
-  });
 
   return (
     <mesh
