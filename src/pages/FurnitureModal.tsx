@@ -99,9 +99,7 @@ const FurnitureModal = () => {
         return;
       }
       const dataURL = threeJSCanvasRef.current.toDataURL("image/png");
-      console.log(dataURL);
       const binaryString = atob(dataURL.split(",")[1]);
-      console.log(binaryString);
       const arrayBuffer = new ArrayBuffer(binaryString.length);
       const view = new Uint8Array(arrayBuffer);
       for (let i = 0; i < binaryString.length; i++) {

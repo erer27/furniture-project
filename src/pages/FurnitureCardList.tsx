@@ -1,7 +1,9 @@
 import axios from "axios";
 import FileSaver from "file-saver";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { RootState } from "../Reducer";
 import getMemberFromSession from "../utils/getMemberFromSession";
 import Card from "./Card";
 import {
@@ -15,14 +17,23 @@ const FurnitureBoardList = () => {
   // const arr = Array.from({ length: 15 }, (_, index) => index);
   const [cardList, setCardList] = useState<any[]>([]);
   const [page, setPage] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState(false);
+
+  // const searchKeyword = useSelector((state: RootState) => {
+  //   return state.searchKeyword.searchKeyword;
+  // });
+
+  const { keyword } = useParams();
 
   const observerRef = useRef<any>();
   const member = getMemberFromSession();
 
   const getFirstPageCardList = useCallback(async () => {
+    console.log(keyword);
     try {
-      const cardListResponse = await axios.post("/firstPageCardList", member);
+      const cardListResponse = await axios.post("/firstPageCardList", {
+        member: member,
+        keyword: keyword,
+      });
       setCardList(cardListResponse.data);
     } catch (error) {
       console.log(error);
@@ -31,11 +42,11 @@ const FurnitureBoardList = () => {
 
   const getNextPageCardList = useCallback(async () => {
     try {
-      console.log(cardList[cardList.length - 1]);
-      const cardListResponse = await axios.post(
-        "/nextPageCardList",
-        cardList[cardList.length - 1]
-      );
+      console.log(cardList);
+      const cardListResponse = await axios.post("/nextPageCardList", {
+        keyword: keyword,
+        post: cardList[cardList.length - 1],
+      });
 
       setCardList((prevList) => [...prevList, ...cardListResponse.data]);
     } catch (error) {
@@ -49,7 +60,7 @@ const FurnitureBoardList = () => {
 
   const handleObserver = (entries: IntersectionObserverEntry[]) => {
     const target = entries[0];
-    if (target.isIntersecting && !isLoading) {
+    if (target.isIntersecting) {
       setPage((prevPage: number) => prevPage + 1);
     }
   };

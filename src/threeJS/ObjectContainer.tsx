@@ -39,7 +39,7 @@ const ObjectContainer = () => {
       <PointerLockControlsComponent />
       <ambientLight intensity={1} />
       <directionalLight position={[-1, 0, 1]} />
-      <axesHelper args={[10]} />
+      {/* <axesHelper args={[10]} /> */}
       <FloorPlane />
       <FurnitureContainer />
     </group>

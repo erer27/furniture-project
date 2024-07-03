@@ -15,6 +15,7 @@ function App() {
 
     <BrowserRouter>
       <Routes>
+        <Route path="/:keyword" element={<MainPage />} />
         <Route path="/" element={<MainPage />} />
         <Route path="/gallery" element={<CanvasContainer />}>
           <Route path=":cardId" element={<CanvasContainer />} />

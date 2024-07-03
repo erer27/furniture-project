@@ -1,6 +1,7 @@
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { RootState } from "../Reducer";
 import getMemberFromSession from "../utils/getMemberFromSession";
 import { Member } from "./SignUpPage";
@@ -103,8 +104,35 @@ const LoginButton = () => {
   );
 };
 
+const initialState = {
+  searchKeyword: "",
+};
+
+type searchKeyword = {
+  searchKeyword: string | undefined;
+};
+const searchKeywordSlice = createSlice({
+  name: "searchKeywordRedux",
+  initialState: initialState,
+  reducers: {
+    setSearchKeyword: (
+      state: searchKeyword,
+      action: PayloadAction<string | undefined>
+    ) => {
+      state.searchKeyword = action.payload;
+    },
+  },
+});
+
+const { setSearchKeyword } = searchKeywordSlice.actions;
+
+export const SearchKeywordReducer = searchKeywordSlice.reducer;
+
 const SearchBox = () => {
+  const dispatch = useDispatch();
   const ref = useRef<any>();
+
+  const { keyword } = useParams();
 
   useEffect(() => {
     ref?.current.addEventListener("click", function (event: any) {
@@ -116,9 +144,21 @@ const SearchBox = () => {
     });
   }, []);
 
-  const handleClick = () => {
-    console.log("search");
-  };
+  const [searchBoxWord, setSearchBoxWord] = useState<string | undefined>("");
+
+  // const searchKeyword = useSelector((state: RootState) => {
+  //   return state.searchKeyword.searchKeyword;
+  // });
+
+  useEffect(() => {
+    console.log(keyword);
+    setSearchBoxWord(keyword);
+  }, []);
+
+  const handleClick = useCallback(() => {
+    dispatch(setSearchKeyword(searchBoxWord));
+    window.location.replace(`/${searchBoxWord}`);
+  }, [searchBoxWord]);
   return (
     <label className="relative block w-80 flex">
       <span className="sr-only">Search</span>
@@ -128,6 +168,10 @@ const SearchBox = () => {
         placeholder="검색"
         type="text"
         name="search"
+        onChange={(e) => {
+          setSearchBoxWord(e.target.value);
+        }}
+        defaultValue={keyword}
       />
       <span
         className="inset-y-0 right-4 flex items-center bg-sky-500 m-0 rounded-r-full w-12 hover:cursor-pointer hover:bg-sky-700"
